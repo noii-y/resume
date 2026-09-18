@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高原 Noah | AI项目经理 · AI交付经理</title>
+    <meta name="description" content="高原（Noah）- AI项目经理/AI交付经理，专注企业AI项目落地与数字化转型，管理10人交付团队，累计交付15+企业级AI项目，覆盖9大行业">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Three.js -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+    <!-- GSAP 动画库 -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <!-- 字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 3D 背景画布 -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- 加载动画 -->
+    <div id="loader">
+        <div class="loader-content">
+            <div class="loader-ring"></div>
+            <p>加载中...</p>
+        </div>
+    </div>
+
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#hero" class="nav-logo">
+                <span class="logo-3d">◆</span>
+                <span>Noah · 高原</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="#hero" class="nav-link">首页</a></li>
+                <li><a href="#about" class="nav-link">关于</a></li>
+                <li><a href="#skills" class="nav-link">技能</a></li>
+                <li><a href="#experience" class="nav-link">经历</a></li>
+                <li><a href="#projects" class="nav-link">项目</a></li>
+                <li><a href="#contact" class="nav-link">联系</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 滚动进度条 -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <main>
+        <!-- Hero 区域 -->
+        <section id="hero" class="section hero-section">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <p class="hero-greeting animate-text">你好，我是</p>
+                    <h1 class="hero-name animate-text">
+                        <span class="name-3d">高原 · Noah</span>
+                    </h1>
+                    <h2 class="hero-title animate-text">
+                        <span class="typed-text"></span>
+                        <span class="cursor">|</span>
+                    </h2>
+                    <p class="hero-desc animate-text">
+                        专注企业 AI 项目落地与数字化转型，管理 10 人交付工程师团队，<br>
+                        直接对接字节跳动 &amp; 飞书生态资源，累计交付 15+ 企业级 AI 项目，覆盖 9 大行业。
+                    </p>
+                    <div class="hero-buttons animate-text">
+                        <a href="#projects" class="btn btn-primary">
+                            <span>查看项目案例</span>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                        <a href="#contact" class="btn btn-secondary">
+                            <span>联系我</span>
+                        </a>
+                    </div>
+                    <div class="hero-socials animate-text">
+                        <a href="https://github.com/noii-y" target="_blank" rel="noopener" class="social-link" title="GitHub">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                            </svg>
+                        </a>
+                        <a href="mailto:2803038543@qq.com" class="social-link" title="Email">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <polyline points="22,6 12,13 2,6"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-3d-indicator">
+                    <div class="scroll-hint">
+                        <span>向下滚动</span>
+                        <div class="scroll-arrow">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 5v14M19 12l-7 7-7-7"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 关于我 -->
+        <section id="about" class="section about-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-number">01</span>
+                    <h2 class="section-title">关于我</h2>
+                    <div class="section-line"></div>
+                </div>
+                <div class="about-content">
+                    <div class="about-image">
+                        <div class="image-3d-wrapper">
+                            <div class="image-placeholder has-photo">
+                                <img src="assets/photo.webp" alt="高原 Noah 照片" class="profile-photo">
+                            </div>
+                            <div class="image-frame"></div>
+                        </div>
+                    </div>
+                    <div class="about-text">
+                        <h3>你好！我是 <span class="highlight">高原（Noah）</span></h3>
+                        <p class="about-paragraph">
+                            我是一名专注于 <strong>AI 应用落地</strong> 的项目交付专家，拥有 2 年企业级 AI 项目实施经验，
+                            现任湖北连邦云创科技有限公司 <strong>AI 交付工程师</strong>，统筹管理 10 人 AI 交付工程师团队。
+                        </p>
+                        <p class="about-paragraph">
+                            我擅长把客户的业务需求转化为可落地的技术方案，直接对接字节跳动 &amp; 飞书华北区渠道资源，
+                            累计交付 <strong>15+ 企业级 AI 项目</strong>，覆盖餐饮、医疗、政企、芯片、电商、环保等 <strong>9 大行业</strong>，
+                            个人项目总金额超 <strong>320 万元</strong>，平均帮助客户效率提升 55% 以上。
+                        </p>
+                        <p class="about-paragraph">
+                            我始终把交付信誉放在第一位：所有任务确保在 deadline 前完成；
+                            若预判存在风险，会提前暴露卡点、协调内外部资源推动解决，而不是等到最后一刻。
+                        </p>
+                        <div class="about-stats">
+                            <div class="stat-item">
+                                <span class="stat-number" data-target="2" data-suffix="+">0</span>
+                                <span class="stat-label">年AI交付经验</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" data-target="15" data-suffix="+">0</span>
+                                <span class="stat-label">交付项目</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" data-target="9" data-suffix="">0</span>
+                                <span class="stat-label">覆盖行业</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" data-target="320" data-suffix="w">0</span>
+                                <span class="stat-label">项目金额</span>
+                            </div>
+                        </div>
+                        <a href="#" class="btn btn-primary download-cv">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            <span>下载简历</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 技能 -->
+        <section id="skills" class="section skills-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-number">02</span>
+                    <h2 class="section-title">技能专长</h2>
+                    <div class="section-line"></div>
+                </div>
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <h3 class="category-title">
+                            <span class="category-icon">💼</span>
+                            项目管理与交付
+                        </h3>
+                        <div class="skill-list">
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span class="skill-name">需求分析</span>
+                                    <span class="skill-percent">92%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="92"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span class="skill-name">项目管理</span>
+                                    <span class="skill-percent">90%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span class="skill-name">客户沟通对接</span>
+                                    <span class="skill-percent">90%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span class="skill-name">团队统筹与资源协调</span>
+                                    <span class="skill-percent">88%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="88"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <h3 class="category-title">
+                            <span class="category-icon">🤖</span>
+                            AI 技术能力
+                        </h3>
+                        <div class="skill-list">
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span class="skill-name">Prompt 工程</span>
+                                    <span class="skill-percent">90%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span class="skill-name">智能体小队 &amp; 智能体搭建</span>
+                                    <span class="skill-percent">88%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="88"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span class="skill-name">大模型应用（GPT/Codex）</span>
+                                    <span class="skill-percent">85%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="85"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span class="skill-name">技术方案设计</span>
+                                    <span class="skill-percent">82%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="82"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <h3 class="category-title">
+                            <span class="category-icon">⚙️</span>
+                            技术工具栈
+                        </h3>
+                        <div class="skill-list">
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span class="skill-name">飞书 / 钉钉生态</span>
+                                    <span class="skill-percent">90%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span class="skill-name">需求 / 产品文档编写</span>
+                                    <span class="skill-percent">88%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="88"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span class="skill-name">Linux / Git</span>
+                                    <span class="skill-percent">80%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="80"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span class="skill-name">Python / Java / SQL / Shell</span>
+                                    <span class="skill-percent">75%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="75"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 技术标签云 -->
+                <div class="tech-tags">
+                    <span class="tech-tag">AI项目管理</span>
+                    <span class="tech-tag">AI交付</span>
+                    <span class="tech-tag">Prompt工程</span>
+                    <span class="tech-tag">智能体搭建</span>
+                    <span class="tech-tag">需求分析</span>
+                    <span class="tech-tag">数字化转型</span>
+                    <span class="tech-tag">企业培训</span>
+                    <span class="tech-tag">轻量级系统搭建</span>
+                    <span class="tech-tag">GPT</span>
+                    <span class="tech-tag">Codex</span>
+                    <span class="tech-tag">LobeHub</span>
+                    <span class="tech-tag">WorkBuddy</span>
+                    <span class="tech-tag">飞书</span>
+                    <span class="tech-tag">钉钉</span>
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">SQL</span>
+                    <span class="tech-tag">Linux</span>
+                    <span class="tech-tag">Git</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 工作经历 -->
+        <section id="experience" class="section experience-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-number">03</span>
+                    <h2 class="section-title">教育与工作经历</h2>
+                    <div class="section-line"></div>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content glass-card">
+                            <div class="timeline-header">
+                                <h3 class="timeline-title">AI 交付工程师</h3>
+                                <span class="timeline-date">2026.03 - 至今</span>
+                            </div>
+                            <p class="timeline-company">湖北连邦云创科技有限公司 · 武汉</p>
+                            <ul class="timeline-list">
+                                <li>负责企业客户 AI 项目的全流程实施交付与培训指导，切实提升客户企业的数字化程度</li>
+                                <li>担任客户项目搭建负责人，独立完成可直接使用的轻量级系统的方案设计与搭建</li>
+                                <li>深入沟通并理解客户业务需求，转化为可落地的技术方案，输出需求文档与产品说明书</li>
+                                <li>从团队项目视角统筹管理，合理安排每位 AI 交付工程师的任务分工与交付时间节点</li>
+                                <li>直接与字节跳动 &amp; 飞书华北区渠道经理沟通，协调内外部资源保障项目推进</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content glass-card">
+                            <div class="timeline-header">
+                                <h3 class="timeline-title">在校助教（教学助理）</h3>
+                                <span class="timeline-date">大学期间</span>
+                            </div>
+                            <p class="timeline-company">武汉东湖学院 · 专业课教学团队</p>
+                            <ul class="timeline-list">
+                                <li>协助专业课老师统筹课程教学，辅导同学消化专业知识、跟进学习进度</li>
+                                <li>为备战学科竞赛的同学提供指导，并组织团队参与项目开发实战，提升实战能力</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content glass-card">
+                            <div class="timeline-header">
+                                <h3 class="timeline-title">Java 开发实习生</h3>
+                                <span class="timeline-date">在校实习</span>
+                            </div>
+                            <p class="timeline-company">武汉网开信息科技有限公司 · 武汉</p>
+                            <ul class="timeline-list">
+                                <li>参与公司 Java 业务系统的后端开发与日常维护，熟悉企业级开发流程</li>
+                                <li>在导师指导下完成功能模块编码、接口联调与问题修复，积累工程协作经验</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content glass-card">
+                            <div class="timeline-header">
+                                <h3 class="timeline-title">计算机科学与技术 · 本科</h3>
+                                <span class="timeline-date">2022 - 2026</span>
+                            </div>
+                            <p class="timeline-company">武汉东湖学院 · 武汉 &nbsp;|&nbsp; <span class="highlight">校级优秀毕业生</span></p>
+                            <ul class="timeline-list">
+                                <li>系统学习计算机科学与技术专业课程，打下扎实的编程与技术基础</li>
+                                <li>在校期间即开始参与企业 AI 项目交付实践，凭综合表现获评校级"优秀毕业生"</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 项目案例 -->
+        <section id="projects" class="section projects-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-number">04</span>
+                    <h2 class="section-title">项目案例</h2>
+                    <div class="section-line"></div>
+                </div>
+                <div class="projects-grid">
+                    <div class="project-card glass-card">
+                        <div class="project-image">
+                            <div class="project-placeholder">
+                                <span class="project-emoji">🍜</span>
+                            </div>
+                            <div class="project-overlay">
+                                <div class="project-links">
+                                    <a href="#contact" class="project-link" title="咨询详情">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                            <polyline points="15 3 21 3 21 9"/>
+                                            <line x1="10" y1="14" x2="21" y2="3"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <h3 class="project-title">餐饮连锁 AI 智能培训考核系统</h3>
+                            <p class="project-desc">
+                                基于<strong>飞书妙搭平台</strong>，为拥有 14 家门店、300 余名管理者与员工的餐饮连锁企业独立搭建培训管理系统：
+                                实现考卷 AI 自动识别判分、主观题智能评分、按岗位智能推荐课程，
+                                解决纸质考试出卷难、判分慢、学习路径单一的痛点。项目处于持续扩张期，
+                                平均每人每半月节省约 1 小时，按 300 人测算每年为客户节省 7200 个人工小时、
+                                折合人力成本约 14.4 万元，获得客户持续好评。
+                            </p>
+                            <div class="project-tags">
+                                <span class="project-tag">飞书妙搭</span>
+                                <span class="project-tag">AI智能判分</span>
+                                <span class="project-tag">课程推荐</span>
+                                <span class="project-tag">独立交付</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-card glass-card">
+                        <div class="project-image">
+                            <div class="project-placeholder">
+                                <span class="project-emoji">🌐</span>
+                            </div>
+                            <div class="project-overlay">
+                                <div class="project-links">
+                                    <a href="#contact" class="project-link" title="咨询详情">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                            <polyline points="15 3 21 3 21 9"/>
+                                            <line x1="10" y1="14" x2="21" y2="3"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <h3 class="project-title">多行业企业级 AI 交付项目群</h3>
+                            <p class="project-desc">
+                                累计交付 15+ 企业级 AI 项目，覆盖互联网、医疗、环保、餐饮、政企、芯片、
+                                进出口贸易、电商、直播 9 大行业，主要服务企业客户与国企，
+                                客户满意度 80%+，个人项目总金额超 320 万元。
+                            </p>
+                            <div class="project-tags">
+                                <span class="project-tag">9大行业</span>
+                                <span class="project-tag">企业/国企客户</span>
+                                <span class="project-tag">320w+</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-card glass-card">
+                        <div class="project-image">
+                            <div class="project-placeholder">
+                                <span class="project-emoji">🤖</span>
+                            </div>
+                            <div class="project-overlay">
+                                <div class="project-links">
+                                    <a href="https://github.com/noii-y" target="_blank" rel="noopener" class="project-link" title="GitHub">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <h3 class="project-title">企业智能体与轻量级系统搭建</h3>
+                            <p class="project-desc">
+                                基于大模型与智能体技术，为企业客户快速搭建可直接使用的轻量级系统，
+                                覆盖智能考核、流程自动化、知识管理等场景；
+                                熟练运用 GPT、Codex、LobeHub、Qoder、WorkBuddy 等 AI 工具链高效落地。
+                            </p>
+                            <div class="project-tags">
+                                <span class="project-tag">智能体小队</span>
+                                <span class="project-tag">GPT/Codex</span>
+                                <span class="project-tag">流程自动化</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-card glass-card">
+                        <div class="project-image">
+                            <div class="project-placeholder">
+                                <span class="project-emoji">👥</span>
+                            </div>
+                            <div class="project-overlay">
+                                <div class="project-links">
+                                    <a href="#contact" class="project-link" title="咨询详情">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                            <polyline points="15 3 21 3 21 9"/>
+                                            <line x1="10" y1="14" x2="21" y2="3"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <h3 class="project-title">AI 交付团队与渠道资源统筹</h3>
+                            <p class="project-desc">
+                                统筹 10 人 AI 交付工程师团队的任务分配与交付节奏，建立高效协作机制；
+                                直接对接字节跳动 &amp; 飞书华北区渠道经理协调资源，
+                                保障项目按时高质量交付，平均帮助客户业务效率提升 55% 以上。
+                            </p>
+                            <div class="project-tags">
+                                <span class="project-tag">10人团队管理</span>
+                                <span class="project-tag">字节/飞书渠道</span>
+                                <span class="project-tag">效率提升55%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 联系方式 -->
+        <section id="contact" class="section contact-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-number">05</span>
+                    <h2 class="section-title">联系我</h2>
+                    <div class="section-line"></div>
+                </div>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <h3>让我们一起把 AI 落地到业务中</h3>
+                        <p>无论是 AI 项目合作、工作机会，还是企业数字化转型咨询，都欢迎随时联系我！</p>
+                        <div class="contact-items">
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                        <polyline points="22,6 12,13 2,6"/>
+                                    </svg>
+                                </div>
+                                <div class="contact-text">
+                                    <span class="contact-label">邮箱</span>
+                                    <a href="mailto:2803038543@qq.com" class="contact-value">2803038543@qq.com</a>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                                    </svg>
+                                </div>
+                                <div class="contact-text">
+                                    <span class="contact-label">GitHub</span>
+                                    <a href="https://github.com/noii-y" target="_blank" rel="noopener" class="contact-value">github.com/noii-y</a>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                        <circle cx="12" cy="10" r="3"/>
+                                    </svg>
+                                </div>
+                                <div class="contact-text">
+                                    <span class="contact-label">位置</span>
+                                    <span class="contact-value">中国 · 武汉</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="contact-socials">
+                            <a href="https://github.com/noii-y" target="_blank" rel="noopener" class="social-link large" title="GitHub">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                                </svg>
+                            </a>
+                            <a href="mailto:2803038543@qq.com" class="social-link large" title="邮箱">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                    <polyline points="22,6 12,13 2,6"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="contact-form-wrapper">
+                        <form class="contact-form glass-card" id="contactForm">
+                            <div class="form-group">
+                                <label for="name">姓名</label>
+                                <input type="text" id="name" name="name" placeholder="你的名字" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">邮箱</label>
+                                <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">主题</label>
+                                <input type="text" id="subject" name="subject" placeholder="想聊点什么？">
+                            </div>
+                            <div class="form-group">
+                                <label for="message">留言</label>
+                                <textarea id="message" name="message" rows="5" placeholder="写下你的消息..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-full">
+                                <span>发送消息</span>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="22" y1="2" x2="11" y2="13"/>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 高原 Noah · AI 项目交付 &amp; 企业数字化转型</p>
+            <p class="footer-sub">用 ❤️ 和 Three.js 打造</p>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <button class="back-to-top" id="backToTop" title="返回顶部">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 19V5M5 12l7-7 7 7"/>
+        </svg>
+    </button>
+
+    <!-- 脚本 -->
+    <script src="js/three-scene.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
