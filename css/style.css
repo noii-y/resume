@@ -1078,6 +1078,16 @@ a.contact-value:hover {
     margin-top: 5px;
 }
 
+.footer-sub a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-sub a:hover {
+    color: var(--accent);
+}
+
 /* 返回顶部按钮 */
 .back-to-top {
     position: fixed;
