@@ -945,6 +945,165 @@ body {
     border-radius: 15px;
 }
 
+/* Hero 格言 */
+.hero-slogan {
+    font-size: 17px;
+    color: var(--text-secondary);
+    letter-spacing: 3px;
+    margin-bottom: 22px;
+    font-weight: 500;
+}
+
+/* 工作之外兴趣标签 */
+.personal-interests {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 26px 0 22px;
+    flex-wrap: wrap;
+}
+
+.interests-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+}
+
+.interests-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.interest-tag {
+    font-size: 13px;
+    color: var(--text-secondary);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    padding: 6px 16px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+.interest-tag:hover {
+    color: var(--text-primary);
+    border-color: var(--primary);
+    background: rgba(99, 102, 241, 0.12);
+}
+
+/* 专业认证 */
+.cert-section {
+    margin-top: 60px;
+}
+
+.cert-heading {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: var(--text-primary);
+}
+
+.cert-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    max-width: 920px;
+    margin: 0 auto;
+}
+
+.cert-card {
+    overflow: hidden;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.cert-img-wrap {
+    display: block;
+    width: 100%;
+    height: 260px;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+.cert-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 0.4s ease;
+}
+
+.cert-card:hover .cert-img {
+    transform: scale(1.04);
+}
+
+.cert-img-tall {
+    object-position: center 26%;
+}
+
+.cert-body {
+    padding: 20px 24px;
+}
+
+.cert-name {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.cert-org {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+
+.cert-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* 项目分组副标题 */
+.projects-subtitle {
+    margin: 50px 0 30px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.projects-subtitle:first-of-type {
+    margin-top: 0;
+}
+
+.projects-subtitle span {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+
+.projects-subtitle::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--glass-border), transparent);
+}
+
+/* 项目静态徽章（不可点击） */
+.project-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 13px;
+    color: var(--text-primary);
+    background: rgba(99, 102, 241, 0.2);
+    border: 1px solid rgba(99, 102, 241, 0.4);
+    backdrop-filter: blur(10px);
+    white-space: nowrap;
+}
+
 /* 联系方式 */
 .contact-content {
     display: grid;
@@ -1241,6 +1400,27 @@ a.contact-value:hover {
     
     .projects-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .cert-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .cert-img-wrap {
+        height: 220px;
+    }
+    
+    .hero-slogan {
+        font-size: 15px;
+        letter-spacing: 2px;
+    }
+    
+    .projects-subtitle {
+        margin: 40px 0 24px;
+    }
+    
+    .projects-subtitle span {
+        font-size: 18px;
     }
     
     .about-stats {
