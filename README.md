@@ -1,187 +1,87 @@
 # 3D 个人简历网站
 
-一个使用 Three.js 打造的沉浸式 3D 风格个人简历展示网站框架。
+[![Website](https://img.shields.io/badge/在线预览-6366f1?style=for-the-badge&logo=googlechrome&logoColor=white)](https://noii-y.github.io/resume/)
+![Three.js](https://img.shields.io/badge/Three.js-r160-black?style=for-the-badge&logo=threedotjs&logoColor=white)
+![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 
-## ✨ 特性
+一个基于 **Three.js + 原生 HTML/CSS/JS** 打造的沉浸式 3D 风格个人在线简历 / 作品集单页网站。纯静态、无后端，免费托管于 GitHub Pages。
 
-- 🎨 **3D 粒子背景** - 3000+ 粒子组成的动态星空效果
-- 🧊 **磨砂玻璃 UI** - 现代毛玻璃设计风格
-- 📱 **响应式设计** - 完美适配手机、平板、电脑
-- ⚡ **流畅动画** - 打字机效果、滚动动画、技能条动画
-- 🎯 **完整模块** - Hero、关于、技能、经历、项目、联系
-- 🚀 **零依赖部署** - 纯静态文件，无需后端
+> 🌐 **在线预览**：[https://noii-y.github.io/resume/](https://noii-y.github.io/resume/)
+
+## ✨ 功能亮点
+
+- 🌌 **3D 粒子星空背景**：3000 粒子动态星空，随鼠标产生视差与旋转交互
+- 🧊 **玻璃拟态界面**：磨砂玻璃卡片 + 渐变主题，现代深色视觉
+- ⌨️ **打字机职位轮播**：循环展示多个职业定位
+- 🎬 **滚动驱动动画**：GSAP ScrollTrigger 触发入场、技能条填充、数字滚动计数
+- 🧭 **完整简历模块**：首页、关于我、技能专长、教育与工作经历、项目案例、专业认证、联系方式
+- 🗂️ **项目分组展示**：企业交付项目与个人技术作品分区呈现
+- 📜 **证书展示**：专业认证卡片，点击可查看原图
+- 📱 **响应式适配**：手机、平板、桌面均有良好排版
+- ⚡ **零构建、零后端**：纯静态文件，开箱即部署
+
+## 🧱 技术栈
+
+| 类别 | 技术 |
+| --- | --- |
+| 3D 渲染 | [Three.js](https://threejs.org/) r160（粒子系统、自定义着色器） |
+| 动画 | [GSAP](https://gsap.com/) 3.12 + ScrollTrigger、原生 CSS 动画 |
+| 页面 | 语义化 HTML5、CSS3（Grid / Flexbox、CSS 变量、`backdrop-filter`） |
+| 交互 | 原生 JavaScript（无框架依赖） |
+| 字体 | Google Fonts · Inter + Noto Sans SC |
+| 托管 | GitHub Pages |
 
 ## 📁 项目结构
 
 ```
-3d-resume-website/
-├── index.html          # 主页面
+resume/
+├── index.html          # 页面结构与全部文案内容
 ├── css/
-│   └── style.css       # 样式文件
+│   └── style.css       # 样式：玻璃拟态、响应式、动画
 ├── js/
-│   ├── three-scene.js  # Three.js 3D场景
-│   └── main.js         # 交互逻辑
-├── assets/             # 资源文件夹（放图片等）
-└── README.md           # 说明文档
+│   ├── three-scene.js  # Three.js 粒子星空 3D 场景
+│   └── main.js         # 交互：打字机、滚动动画、计数、导航等
+├── assets/             # 图片资源（个人照片、证书等）
+└── README.md
 ```
 
-## 🚀 快速开始
+## 🚀 本地运行
 
-### 本地预览
+直接用浏览器打开 `index.html` 即可（Three.js 与字体通过 CDN 加载，需联网）。
 
-直接用浏览器打开 `index.html` 即可预览。
-
-推荐使用本地服务器（避免某些浏览器限制）：
+如遇浏览器本地文件限制，推荐起一个静态服务器：
 
 ```bash
 # Python 3
 python -m http.server 8000
 
-# Node.js
+# 或 Node.js
 npx serve .
-
-# VS Code
-# 使用 Live Server 插件
 ```
 
-然后访问 `http://localhost:8000`
+然后访问 <http://localhost:8000>。
 
-## 📝 内容修改指南
+## 🌐 部署到 GitHub Pages
 
-### 1. 基本信息
+1. 将仓库推送到 GitHub；
+2. 进入仓库 **Settings → Pages**；
+3. **Source** 选择 `main` 分支、根目录 `/(root)`；
+4. 等待约 1–2 分钟，即可通过 `https://<用户名>.github.io/<仓库名>/` 访问。
 
-打开 `index.html`，搜索以下占位符并替换：
+> 💡 **更新缓存提示**：`index.html` 中对 CSS / JS / 图片引用带了 `?v=版本号` 参数。每次更新内容后，把版本号往后拨一位（如 `?v=20260920f` → `?v=20260920g`），即可让访客浏览器与 CDN 立即加载最新版本，而不是旧缓存。
 
-| 占位符 | 位置 | 说明 |
-|--------|------|------|
-| `[你的名字]` | 多处 | 你的姓名 |
-| `[你的职业]` | 关于我 | 职业身份 |
-| `[X]年` | 关于我 | 工作年限 |
-| `your@email.com` | 联系区 | 邮箱地址 |
-| `+86 138-XXXX-XXXX` | 联系区 | 电话号码 |
-| `[城市]` | 联系区 | 所在城市 |
+## 📬 交流反馈
 
-### 2. 打字机职位
+- 项目源码与更多作品见作者的 [GitHub 主页](https://github.com/noii-y)
+- 问题与建议欢迎在 [Issues](https://github.com/noii-y/resume/issues) 中提出
 
-在 `js/main.js` 中修改 `phrases` 数组：
+## 📄 版权说明
 
-```javascript
-const phrases = [
-    '前端开发工程师',
-    'UI/UX 设计师',
-    // 添加你的职位...
-];
-```
-
-### 3. 技能数据
-
-在 `index.html` 的技能区域修改：
-- 技能名称
-- 百分比（`data-width` 属性）
-- 技术标签
-
-### 4. 工作经历
-
-在时间线区域修改：
-- 职位名称
-- 时间范围
-- 公司名称
-- 工作描述列表
-
-### 5. 项目作品
-
-每个项目卡片修改：
-- 项目标题
-- 项目描述
-- 技术标签
-- 项目链接（GitHub、演示地址）
-
-### 6. 个人照片
-
-将照片放入 `assets/` 文件夹，然后在 `index.html` 中找到 `.image-placeholder` 替换为：
-
-```html
-<div class="image-placeholder">
-    <img src="assets/your-photo.jpg" alt="你的名字" style="width:100%;height:100%;object-fit:cover;border-radius:20px;">
-</div>
-```
-
-### 7. 社交链接
-
-在 Hero 区域和联系区域修改社交链接的 `href` 属性：
-- GitHub
-- LinkedIn
-- 邮箱
-- 微信（可选）
-
-## 🌐 部署方式
-
-### 方式一：GitHub Pages（推荐，免费）
-
-1. 创建 GitHub 仓库
-2. 上传所有文件
-3. 进入 Settings → Pages
-4. Source 选择 `main` 分支
-5. 等待部署完成，获得 `https://username.github.io/repo-name/` 地址
-
-### 方式二：Vercel（免费，速度快）
-
-1. 注册 [Vercel](https://vercel.com)
-2. 导入 GitHub 仓库
-3. 一键部署
-4. 获得 `https://project-name.vercel.app` 地址
-
-### 方式三：Netlify（免费）
-
-1. 注册 [Netlify](https://netlify.com)
-2. 拖拽项目文件夹到部署区
-3. 完成部署
-
-### 方式四：阿里云/腾讯云（国内访问快）
-
-1. 购买域名和服务器
-2. 域名备案（国内必需）
-3. 使用 Nginx 托管静态文件
-4. 配置 HTTPS 证书
-
-## 🎨 自定义配色
-
-在 `css/style.css` 顶部修改 CSS 变量：
-
-```css
-:root {
-    --primary: #6366f1;      /* 主色调 */
-    --secondary: #8b5cf6;    /* 辅助色 */
-    --accent: #06b6d4;       /* 强调色 */
-    --bg-dark: #0a0a1a;      /* 背景色 */
-}
-```
-
-## 🔧 技术栈
-
-- **Three.js** - 3D 图形渲染
-- **GSAP** - 动画库（可选）
-- **纯 HTML/CSS/JS** - 无框架依赖
-- **Google Fonts** - Inter + Noto Sans SC
-
-## 📱 浏览器兼容
-
-- Chrome 90+
-- Firefox 88+
-- Safari 14+
-- Edge 90+
-
-## 📄 许可证
-
-MIT License - 可自由使用和修改。
-
-## 🤝 致谢
-
-灵感来源于抖音高赞视频中的个人网站制作教程，包括：
-- @小羊同学 - Codex 制作个人作品集
-- @小郑还挺忙 - 3D 互动简历
-- @数字游牧人Samuel - 酷炫个人网站技巧
+- **代码部分**（HTML / CSS / JavaScript）基于 [MIT License](https://opensource.org/license/mit) 开放，欢迎学习参考。
+- **个人内容**（包括但不限于简历文案、个人照片、证书图片、项目与业绩数据）版权归站点作者所有，**未经书面授权，禁止转载、复制或用于任何商业用途**。
 
 ---
 
-**用 ❤️ 和 Three.js 打造**
+用 ❤️ 和 Three.js 打造
