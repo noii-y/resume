@@ -261,13 +261,14 @@ function initContactForm() {
     const form = document.getElementById('contactForm');
     if (!form) return;
 
-    // 留言接收邮箱（静态站点通过访客本机邮件客户端 mailto 投递，无需后端、不依赖任何第三方账号）
+    // 留言接收邮箱（静态网站本身不能代发邮件，这里只负责整理内容并交给访客自己的邮箱）
     const RECEIVE_EMAIL = '2803038543@qq.com';
     const statusEl = document.getElementById('formStatus');
     const submitBtn = form.querySelector('button[type="submit"]');
     const originalHTML = submitBtn.innerHTML;
 
-    // 暂存最近一次留言，供状态条“复制”按钮使用
+    // 暂存最近一次留言，供面板里的“复制 / 打开邮件客户端”使用
+    let lastMailto = '';
     let lastSubject = '';
     let lastBody = '';
 
@@ -290,22 +291,39 @@ function initContactForm() {
         return Promise.resolve(legacyCopy(text));
     };
 
-    // 状态条内“复制”按钮（事件委托，状态内容重建也不影响）
+    // 仅在访客主动点击时才尝试唤起本机邮件客户端（网页无法知道是否成功）
+    const openMailClient = () => {
+        if (!lastMailto) return;
+        const a = document.createElement('a');
+        a.href = lastMailto;
+        a.rel = 'noopener';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+    };
+
+    // 面板内按钮（事件委托，面板内容重建也不影响）
     if (statusEl) {
         statusEl.addEventListener('click', (e) => {
-            const btn = e.target.closest('[data-copy]');
-            if (!btn) return;
-            const text = btn.dataset.copy === 'email'
-                ? RECEIVE_EMAIL
-                : ('收件人：' + RECEIVE_EMAIL + '\n' +
-                   '主题：' + lastSubject + '\n' +
-                   '正文：\n' + lastBody);
-            copyText(text).then((ok) => {
-                const old = btn.textContent;
-                btn.textContent = ok ? '已复制 ✓' : '请手动选择复制';
-                btn.disabled = true;
-                setTimeout(() => { btn.textContent = old; btn.disabled = false; }, 1600);
-            });
+            const copyBtn = e.target.closest('[data-copy]');
+            if (copyBtn) {
+                const text = copyBtn.dataset.copy === 'email'
+                    ? RECEIVE_EMAIL
+                    : ('收件人：' + RECEIVE_EMAIL + '\n' +
+                       '主题：' + lastSubject + '\n' +
+                       '正文：\n' + lastBody);
+                copyText(text).then((ok) => {
+                    const old = copyBtn.textContent;
+                    copyBtn.textContent = ok ? '已复制 ✓' : '请手动选择复制';
+                    copyBtn.disabled = true;
+                    setTimeout(() => { copyBtn.textContent = old; copyBtn.disabled = false; }, 1600);
+                });
+                return;
+            }
+            if (e.target.closest('[data-openmail]')) {
+                openMailClient();
+            }
         });
     }
 
@@ -331,39 +349,23 @@ function initContactForm() {
             '主题：' + (subject || '（未填写）') + '\r\n' +
             '------------------------------\r\n' +
             message + '\r\n';
-        const mailto =
+        lastMailto =
             'mailto:' + RECEIVE_EMAIL +
             '?subject=' + encodeURIComponent(lastSubject) +
             '&body=' + encodeURIComponent(lastBody);
 
-        submitBtn.innerHTML = '<span>正在打开邮件客户端…</span>';
-        submitBtn.disabled = true;
-
-        // 用临时隐藏链接触发协议，避免 location 导航在部分浏览器里打开空白新标签
-        const a = document.createElement('a');
-        a.href = mailto;
-        a.rel = 'noopener';
-        a.style.display = 'none';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-
+        // 不自动跳转、不假装已发送：给出确定可用的发送方式面板
         if (statusEl) {
             statusEl.className = 'form-status is-info';
             statusEl.innerHTML =
-                '📮 已尝试打开你的邮件客户端，收件人、主题和正文都已填好，点击「发送」即可。' +
-                '<span class="form-status-actions">如果没有弹出窗口，可 ' +
-                '<button type="button" class="form-copy-btn" data-copy="email">复制邮箱地址</button>' +
-                ' 或 ' +
-                '<button type="button" class="form-copy-btn" data-copy="body">复制留言全文</button>' +
-                '，到你常用的邮箱（网页版也行）里发给我。</span>';
+                '<span class="sp-lead">留言已整理好。静态网站无法直接替你发送邮件，请选择一种方式：</span>' +
+                '<span class="sp-actions">' +
+                    '<button type="button" class="form-copy-btn sp-primary" data-copy="body">复制留言全文</button>' +
+                    '<button type="button" class="form-copy-btn" data-copy="email">复制邮箱地址</button>' +
+                    '<button type="button" class="form-copy-btn sp-open" data-openmail>用本机邮件客户端打开</button>' +
+                '</span>' +
+                '<span class="sp-hint">推荐：点「复制留言全文」，打开你自己常用的邮箱（网页版或 App），粘贴收件人、主题和正文后发送。「用本机邮件客户端打开」只在你设备已安装并配置邮件软件时有效；若点击后没有任何反应，说明该设备未配置邮件客户端，请直接用上面的复制方式。</span>';
         }
-
-        // 保留表单内容，避免邮件客户端未弹出时留言丢失
-        setTimeout(() => {
-            submitBtn.innerHTML = originalHTML;
-            submitBtn.disabled = false;
-        }, 1800);
     });
 }
 

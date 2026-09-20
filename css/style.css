@@ -1220,10 +1220,43 @@ a.contact-value:hover {
     word-break: break-all;
 }
 
-.form-status-actions {
+.sp-lead {
     display: block;
-    margin-top: 8px;
-    line-height: 2;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.sp-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 2px 0 10px;
+}
+
+.sp-actions .form-copy-btn {
+    margin: 0;
+}
+
+.form-copy-btn.sp-primary {
+    color: #fff;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-color: transparent;
+}
+
+.form-copy-btn.sp-primary:hover {
+    color: #fff;
+    filter: brightness(1.1);
+}
+
+.form-copy-btn.sp-open {
+    background: transparent;
+}
+
+.sp-hint {
+    display: block;
+    font-size: 0.78rem;
+    line-height: 1.7;
+    opacity: 0.8;
 }
 
 .form-copy-btn {
