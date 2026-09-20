@@ -972,11 +972,11 @@ body {
     color: var(--text-primary);
 }
 
-/* 两列宽度比 = 两张证书自身宽高比之比(0.708 竖版 : 1.778 横版)，
-   使竖/横证书渲染高度恰好相等、卡宽各自贴合证书形状：完整、不裁剪、无白边、底部对齐 */
+/* 两张均为竖版证书，列宽比 = 各自宽高比之比(0.708 : 0.737)，
+   使两证渲染高度恰好相等、近乎等宽并排：完整、不裁剪、无白边、底部对齐 */
 .cert-grid {
     display: grid;
-    grid-template-columns: 0.708fr 1.778fr;
+    grid-template-columns: 0.708fr 0.737fr;
     gap: 30px;
     max-width: 820px;
     margin: 0 auto;
