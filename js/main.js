@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initMobileMenu();
     initContactForm();
     initSmoothScroll();
+    initProjectModal();
 });
 
 /**
@@ -260,30 +261,64 @@ function initContactForm() {
     const form = document.getElementById('contactForm');
     if (!form) return;
 
+    // 留言接收邮箱（静态站点通过访客本机邮件客户端 mailto 投递，无需后端、不依赖任何第三方账号）
+    const RECEIVE_EMAIL = '2803038543@qq.com';
+    const statusEl = document.getElementById('formStatus');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalHTML = submitBtn.innerHTML;
+
+    const setStatus = (html, type) => {
+        if (!statusEl) return;
+        statusEl.innerHTML = html;
+        statusEl.className = 'form-status' + (type ? ' is-' + type : '');
+    };
+
     form.addEventListener('submit', (e) => {
         e.preventDefault();
-        
-        // 获取表单数据
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData);
-        
-        // 这里可以添加实际的表单提交逻辑
-        // 目前只是演示
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerHTML;
-        
-        submitBtn.innerHTML = '<span>发送中...</span>';
+
+        // 原生必填 / 邮箱格式校验
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
+        const data = Object.fromEntries(new FormData(form).entries());
+        const name = (data.name || '').trim();
+        const from = (data.email || '').trim();
+        const subject = (data.subject || '').trim();
+        const message = (data.message || '').trim();
+
+        const mailSubject = '【个人网站留言】' + (subject || '合作 / 交流咨询') + ' — ' + name;
+        const mailBody =
+            '姓名：' + name + '\r\n' +
+            '回复邮箱：' + from + '\r\n' +
+            '主题：' + (subject || '（未填写）') + '\r\n' +
+            '------------------------------\r\n' +
+            message + '\r\n';
+
+        const mailto =
+            'mailto:' + RECEIVE_EMAIL +
+            '?subject=' + encodeURIComponent(mailSubject) +
+            '&body=' + encodeURIComponent(mailBody);
+
+        submitBtn.innerHTML = '<span>正在打开邮件客户端…</span>';
         submitBtn.disabled = true;
-        
+
+        // 打开访客本机邮件客户端，主题与正文已预填，访客点击「发送」即送达
+        window.location.href = mailto;
+
+        setStatus(
+            '📮 已为你生成邮件草稿，请在弹出的邮件客户端中点击「发送」。' +
+            '若没有弹出窗口，可直接发邮件到 ' +
+            '<a href="mailto:' + RECEIVE_EMAIL + '">' + RECEIVE_EMAIL + '</a>，我会尽快回复。',
+            'info'
+        );
+
+        // 保留表单内容，避免邮件客户端未弹出时留言丢失
         setTimeout(() => {
-            submitBtn.innerHTML = '<span>✓ 发送成功！</span>';
-            form.reset();
-            
-            setTimeout(() => {
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }, 2000);
-        }, 1500);
+            submitBtn.innerHTML = originalHTML;
+            submitBtn.disabled = false;
+        }, 1800);
     });
 }
 
@@ -329,3 +364,80 @@ document.addEventListener('mousemove', (e) => {
 console.log('%c🎨 3D Resume Website', 'font-size: 24px; font-weight: bold; color: #6366f1;');
 console.log('%c高原 Noah · AI项目经理 / AI交付经理', 'font-size: 14px; color: #8b5cf6;');
 console.log('%c欢迎查看源码！', 'font-size: 12px; color: #06b6d4;');
+
+/**
+ * 项目详情弹窗
+ * 点击任意 [data-modal="key"] 按钮，把 <template id="tpl-key"> 的内容注入通用弹窗并打开。
+ * 后续新增项目详情只需：加一个 <template id="tpl-xxx"> + 在卡片放 data-modal="xxx" 按钮，无需改本函数。
+ */
+function initProjectModal() {
+    const overlay = document.getElementById('projectModal');
+    const bodyBox = document.getElementById('modalBody');
+    const closeBtn = document.getElementById('modalClose');
+    if (!overlay || !bodyBox) return;
+
+    let lastFocus = null;
+
+    function openModal(key) {
+        const tpl = document.getElementById('tpl-' + key);
+        if (!tpl) return;
+        bodyBox.innerHTML = '';
+        bodyBox.appendChild(tpl.content.cloneNode(true));
+        overlay.classList.add('open');
+        overlay.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('modal-open');
+        overlay.scrollTop = 0;
+        lastFocus = document.activeElement;
+        const closeIcon = overlay.querySelector('.modal-close');
+        if (closeIcon) closeIcon.focus();
+
+        // 弹窗内锚点链接（如「咨询同类方案」）：关闭弹窗并平滑滚动到目标区块
+        bodyBox.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', (ev) => {
+                const href = anchor.getAttribute('href');
+                if (href === '#') return;
+                ev.preventDefault();
+                closeModal();
+                const target = document.querySelector(href);
+                if (target) {
+                    window.scrollTo({ top: target.offsetTop - 70, behavior: 'smooth' });
+                }
+            });
+        });
+    }
+
+    function closeModal() {
+        overlay.classList.remove('open');
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('modal-open');
+        bodyBox.innerHTML = '';
+        if (lastFocus && typeof lastFocus.focus === 'function') {
+            lastFocus.focus();
+        }
+    }
+
+    // 事件委托：所有「查看项目详情」按钮
+    document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('[data-modal]');
+        if (trigger) {
+            e.preventDefault();
+            openModal(trigger.getAttribute('data-modal'));
+            return;
+        }
+        // 点击遮罩空白区域关闭
+        if (e.target === overlay) {
+            closeModal();
+        }
+    });
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeModal);
+    }
+
+    // ESC 关闭
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && overlay.classList.contains('open')) {
+            closeModal();
+        }
+    });
+}
