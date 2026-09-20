@@ -267,11 +267,47 @@ function initContactForm() {
     const submitBtn = form.querySelector('button[type="submit"]');
     const originalHTML = submitBtn.innerHTML;
 
-    const setStatus = (html, type) => {
-        if (!statusEl) return;
-        statusEl.innerHTML = html;
-        statusEl.className = 'form-status' + (type ? ' is-' + type : '');
+    // 暂存最近一次留言，供状态条“复制”按钮使用
+    let lastSubject = '';
+    let lastBody = '';
+
+    const legacyCopy = (text) => {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
+        document.body.appendChild(ta);
+        ta.select();
+        let ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+        ta.remove();
+        return ok;
     };
+    const copyText = (text) => {
+        if (navigator.clipboard && window.isSecureContext) {
+            return navigator.clipboard.writeText(text).then(() => true).catch(() => legacyCopy(text));
+        }
+        return Promise.resolve(legacyCopy(text));
+    };
+
+    // 状态条内“复制”按钮（事件委托，状态内容重建也不影响）
+    if (statusEl) {
+        statusEl.addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-copy]');
+            if (!btn) return;
+            const text = btn.dataset.copy === 'email'
+                ? RECEIVE_EMAIL
+                : ('收件人：' + RECEIVE_EMAIL + '\n' +
+                   '主题：' + lastSubject + '\n' +
+                   '正文：\n' + lastBody);
+            copyText(text).then((ok) => {
+                const old = btn.textContent;
+                btn.textContent = ok ? '已复制 ✓' : '请手动选择复制';
+                btn.disabled = true;
+                setTimeout(() => { btn.textContent = old; btn.disabled = false; }, 1600);
+            });
+        });
+    }
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -288,31 +324,40 @@ function initContactForm() {
         const subject = (data.subject || '').trim();
         const message = (data.message || '').trim();
 
-        const mailSubject = '【个人网站留言】' + (subject || '合作 / 交流咨询') + ' — ' + name;
-        const mailBody =
+        lastSubject = '【个人网站留言】' + (subject || '合作 / 交流咨询') + ' — ' + name;
+        lastBody =
             '姓名：' + name + '\r\n' +
             '回复邮箱：' + from + '\r\n' +
             '主题：' + (subject || '（未填写）') + '\r\n' +
             '------------------------------\r\n' +
             message + '\r\n';
-
         const mailto =
             'mailto:' + RECEIVE_EMAIL +
-            '?subject=' + encodeURIComponent(mailSubject) +
-            '&body=' + encodeURIComponent(mailBody);
+            '?subject=' + encodeURIComponent(lastSubject) +
+            '&body=' + encodeURIComponent(lastBody);
 
         submitBtn.innerHTML = '<span>正在打开邮件客户端…</span>';
         submitBtn.disabled = true;
 
-        // 打开访客本机邮件客户端，主题与正文已预填，访客点击「发送」即送达
-        window.location.href = mailto;
+        // 用临时隐藏链接触发协议，避免 location 导航在部分浏览器里打开空白新标签
+        const a = document.createElement('a');
+        a.href = mailto;
+        a.rel = 'noopener';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
 
-        setStatus(
-            '📮 已为你生成邮件草稿，请在弹出的邮件客户端中点击「发送」。' +
-            '若没有弹出窗口，可直接发邮件到 ' +
-            '<a href="mailto:' + RECEIVE_EMAIL + '">' + RECEIVE_EMAIL + '</a>，我会尽快回复。',
-            'info'
-        );
+        if (statusEl) {
+            statusEl.className = 'form-status is-info';
+            statusEl.innerHTML =
+                '📮 已尝试打开你的邮件客户端，收件人、主题和正文都已填好，点击「发送」即可。' +
+                '<span class="form-status-actions">如果没有弹出窗口，可 ' +
+                '<button type="button" class="form-copy-btn" data-copy="email">复制邮箱地址</button>' +
+                ' 或 ' +
+                '<button type="button" class="form-copy-btn" data-copy="body">复制留言全文</button>' +
+                '，到你常用的邮箱（网页版也行）里发给我。</span>';
+        }
 
         // 保留表单内容，避免邮件客户端未弹出时留言丢失
         setTimeout(() => {

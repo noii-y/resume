@@ -1220,6 +1220,38 @@ a.contact-value:hover {
     word-break: break-all;
 }
 
+.form-status-actions {
+    display: block;
+    margin-top: 8px;
+    line-height: 2;
+}
+
+.form-copy-btn {
+    display: inline-block;
+    margin: 0 2px;
+    padding: 3px 12px;
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #c7d2fe;
+    background: rgba(99, 102, 241, 0.16);
+    border: 1px solid rgba(165, 180, 252, 0.45);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.form-copy-btn:hover {
+    color: #fff;
+    background: rgba(99, 102, 241, 0.34);
+    border-color: #a5b4fc;
+}
+
+.form-copy-btn:disabled {
+    opacity: 0.75;
+    cursor: default;
+}
+
 /* 页脚 */
 .footer {
     padding: 40px 0;
