@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initBackToTop();
     initMobileMenu();
     initContactForm();
+    initWechatCopy();
     initSmoothScroll();
     initProjectModal();
 });
@@ -261,13 +262,16 @@ function initContactForm() {
     const form = document.getElementById('contactForm');
     if (!form) return;
 
-    // 留言接收邮箱（静态网站本身不能代发邮件，这里只负责整理内容并交给访客自己的邮箱）
+    // 留言接收邮箱
     const RECEIVE_EMAIL = '2803038543@qq.com';
+    // 阿里云函数计算 Web 函数的 HTTPS 地址，部署后填入。
+    // 留空时表单自动走“复制兜底”，不会报错（部署前 / 后端不可用时的安全行为）。
+    const CONTACT_ENDPOINT = '';
     const statusEl = document.getElementById('formStatus');
     const submitBtn = form.querySelector('button[type="submit"]');
     const originalHTML = submitBtn.innerHTML;
 
-    // 暂存最近一次留言，供面板里的“复制 / 打开邮件客户端”使用
+    // 暂存最近一次留言，供兜底面板里的“复制 / 打开邮件客户端”使用
     let lastMailto = '';
     let lastSubject = '';
     let lastBody = '';
@@ -303,7 +307,51 @@ function initContactForm() {
         a.remove();
     };
 
-    // 面板内按钮（事件委托，面板内容重建也不影响）
+    const setLoading = (loading) => {
+        submitBtn.disabled = loading;
+        if (loading) {
+            const span = submitBtn.querySelector('span');
+            if (span) span.textContent = '正在发送…';
+        } else {
+            submitBtn.innerHTML = originalHTML;
+        }
+    };
+
+    // 兜底面板：在线发送不可用时，确定可用的复制 / 本机客户端方式（不夸大、不假装）
+    const renderFallback = () => {
+        if (!statusEl) return;
+        statusEl.className = 'form-status is-info';
+        statusEl.innerHTML =
+            '<span class="sp-lead">在线发送未成功，留言已为你整理好，请选择一种方式发送：</span>' +
+            '<span class="sp-actions">' +
+                '<button type="button" class="form-copy-btn sp-primary" data-copy="body">复制留言全文</button>' +
+                '<button type="button" class="form-copy-btn" data-copy="email">复制邮箱地址</button>' +
+                '<button type="button" class="form-copy-btn sp-open" data-openmail>用本机邮件客户端打开</button>' +
+            '</span>' +
+            '<span class="sp-hint">推荐点「复制留言全文」，打开你常用的邮箱（网页版或 App）粘贴发送；「用本机邮件客户端打开」仅在设备配置了邮件软件时有效，点了没反应就用复制。</span>';
+    };
+
+    const renderSuccess = () => {
+        if (!statusEl) return;
+        statusEl.className = 'form-status is-success';
+        statusEl.textContent = '✓ 留言已发送，我会尽快回复你（回复将发到你填写的邮箱）。';
+    };
+
+    const buildMailto = (name, from, subject, message) => {
+        lastSubject = '【个人网站留言】' + (subject || '合作 / 交流咨询') + ' — ' + name;
+        lastBody =
+            '姓名：' + name + '\r\n' +
+            '回复邮箱：' + from + '\r\n' +
+            '主题：' + (subject || '（未填写）') + '\r\n' +
+            '------------------------------\r\n' +
+            message + '\r\n';
+        lastMailto =
+            'mailto:' + RECEIVE_EMAIL +
+            '?subject=' + encodeURIComponent(lastSubject) +
+            '&body=' + encodeURIComponent(lastBody);
+    };
+
+    // 状态条内按钮（事件委托，面板内容重建也不影响）
     if (statusEl) {
         statusEl.addEventListener('click', (e) => {
             const copyBtn = e.target.closest('[data-copy]');
@@ -327,7 +375,7 @@ function initContactForm() {
         });
     }
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         // 原生必填 / 邮箱格式校验
@@ -341,31 +389,91 @@ function initContactForm() {
         const from = (data.email || '').trim();
         const subject = (data.subject || '').trim();
         const message = (data.message || '').trim();
+        const honeypot = (data.company_website || '').trim();
 
-        lastSubject = '【个人网站留言】' + (subject || '合作 / 交流咨询') + ' — ' + name;
-        lastBody =
-            '姓名：' + name + '\r\n' +
-            '回复邮箱：' + from + '\r\n' +
-            '主题：' + (subject || '（未填写）') + '\r\n' +
-            '------------------------------\r\n' +
-            message + '\r\n';
-        lastMailto =
-            'mailto:' + RECEIVE_EMAIL +
-            '?subject=' + encodeURIComponent(lastSubject) +
-            '&body=' + encodeURIComponent(lastBody);
+        // 先整理好留言，任何兜底方式都能用
+        buildMailto(name, from, subject, message);
 
-        // 不自动跳转、不假装已发送：给出确定可用的发送方式面板
-        if (statusEl) {
-            statusEl.className = 'form-status is-info';
-            statusEl.innerHTML =
-                '<span class="sp-lead">留言已整理好。静态网站无法直接替你发送邮件，请选择一种方式：</span>' +
-                '<span class="sp-actions">' +
-                    '<button type="button" class="form-copy-btn sp-primary" data-copy="body">复制留言全文</button>' +
-                    '<button type="button" class="form-copy-btn" data-copy="email">复制邮箱地址</button>' +
-                    '<button type="button" class="form-copy-btn sp-open" data-openmail>用本机邮件客户端打开</button>' +
-                '</span>' +
-                '<span class="sp-hint">推荐：点「复制留言全文」，打开你自己常用的邮箱（网页版或 App），粘贴收件人、主题和正文后发送。「用本机邮件客户端打开」只在你设备已安装并配置邮件软件时有效；若点击后没有任何反应，说明该设备未配置邮件客户端，请直接用上面的复制方式。</span>';
+        const endpoint = (CONTACT_ENDPOINT || '').trim();
+        // 后端未配置：直接给兜底面板（部署前行为，与纯静态站一致）
+        if (!endpoint) {
+            renderFallback();
+            return;
         }
+
+        setLoading(true);
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 12000);
+        try {
+            const res = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: name,
+                    email: from,
+                    subject: subject,
+                    message: message,
+                    company_website: honeypot
+                }),
+                signal: ctrl.signal
+            });
+            let json = {};
+            try { json = await res.json(); } catch (err) { json = {}; }
+            if (res.ok && json.ok) {
+                renderSuccess();
+                form.reset();
+            } else {
+                renderFallback();
+            }
+        } catch (err) {
+            renderFallback();
+        } finally {
+            clearTimeout(timer);
+            setLoading(false);
+        }
+    });
+}
+
+/**
+ * 通用复制到剪贴板（安全上下文用 Clipboard API，否则降级 execCommand）
+ */
+function copyToClipboard(text) {
+    const legacy = () => {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
+        document.body.appendChild(ta);
+        ta.select();
+        let ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+        ta.remove();
+        return ok;
+    };
+    if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text).then(() => true).catch(() => legacy());
+    }
+    return Promise.resolve(legacy());
+}
+
+/**
+ * 微信号一键复制（独立于留言表单，表单移除后仍可用）
+ * data-wechat 配置微信号后按钮自动启用，为空则禁用。
+ */
+function initWechatCopy() {
+    const btn = document.getElementById('copyWechat');
+    if (!btn) return;
+    const refresh = () => { btn.disabled = !(btn.dataset.wechat || '').trim(); };
+    refresh();
+    btn.addEventListener('click', () => {
+        const wid = (btn.dataset.wechat || '').trim();
+        if (!wid) return;
+        copyToClipboard(wid).then((ok) => {
+            const old = btn.textContent;
+            btn.textContent = ok ? '已复制 ✓' : '请手动复制';
+            btn.disabled = true;
+            setTimeout(() => { btn.textContent = old; refresh(); }, 1600);
+        });
     });
 }
 
